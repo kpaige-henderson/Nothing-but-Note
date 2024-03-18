@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-//notes page routh
+//notes page route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'notes.html'));
 });
