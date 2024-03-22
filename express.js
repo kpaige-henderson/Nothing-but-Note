@@ -31,7 +31,6 @@ app.get('/api/notes', (req, res) => {
 });
 
 
-
 app.post('/api/notes', (req, res) => {
 
     const { title, text } = req.body;
@@ -62,8 +61,30 @@ app.post('/api/notes', (req, res) => {
     });
 });
 
+//delete note by id
+app.delete('/api/notes/:id', (req, res) => {
+    const noteId = parseInt(req.params.id);
+    fs.readFile(path.join(__dirname, '/db/db.json'), 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        let notes = JSON.parse(data);
+        const updateNotes = notes.filter(note => note.id !== noteId);
+        fs.writeFile(path.join(__dirname, '/db/db.json'), JSON.stringify(updateNotes), (err) => {
+            if (err) {
+                console.error(err);
+                res.status(500).json({ error: 'Interal server error' });
+                return;
+            }
+            res.json({ message: 'Note has successfully deleted' });
+        });
+    });
+});
+
 function generateUniqueId() {
- return Math.floor(Math.random() * 1000);
+    return Math.floor(Math.random() * 1000);
 }
 
 //landing page route
